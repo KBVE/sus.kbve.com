@@ -4,6 +4,10 @@ version = "0.0.1"
 authors = ["KBVE <@ziggy9263, @h0lybyte>"]
 repository = "https://github.com/KBVE/sus.kbve.com"
 homepage = "https://kbve.com/project/api/"
-edition = "2022"
+edition = "2021"
 
 [dependencies]
+tokio = { version = "1", features = ["full"] }
+warp = "0.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
