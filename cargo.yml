@@ -1,0 +1,7 @@
+[package]
+name = "sus-kbve"
+version = "0.0.1"
+authors = ["KBVE <@ziggy9263, @h0lybyte>"]
+repository = "https://github.com/KBVE/sus.kbve.com"
+homepage = "https://kbve.com/project/api/"
+edition = "2022"
