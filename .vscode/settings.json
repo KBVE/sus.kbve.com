@@ -1,7 +1,10 @@
 {
     "cSpell.words": [
         "kbve",
+        "msrv",
+        "Portainer",
         "reqwest",
+        "rustfmt",
         "serde"
     ]
 }

@@ -1,5 +1,8 @@
+// HashMaps are OP.
+use std::collections::HashMap;
+// Calling Warp.
 use warp::{Filter, Rejection, Reply};
-
+// Results would be within the parameters below.
 type Result<T> = std::result::Result<T, Rejection>;
 
 
