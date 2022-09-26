@@ -1,6 +1,12 @@
 // FS - Read Environmental Variables from Docker Secrets
 use std::fs;
 
+//
+use std::env;
+
+//
+use std::sync::Once;
+
 // FS Async
 //use tokio::fs;
 
@@ -12,6 +18,11 @@ use std::fs;
 //  use hyper::header::{Headers, Authorization, Bearer};
 use reqwest::Client;
 use reqwest::header::{HeaderMap, HeaderValue, USER_AGENT, CONTENT_TYPE};
+
+// Rocket
+use rocket::request::FromRequest;
+use rocket::request::Outcome;
+use rocket::Request;
 
 // Calling Warp.
 use warp::{Filter, Rejection, Reply};
@@ -25,17 +36,28 @@ fn construct_headers() -> HeaderMap {
     headers
 }
 
+fn setenv() {
+    let file_path = "/run/secrets/API_TOKEN_FILE";
+    let api_token = fs::read_to_string(file_path)
+    .expect("API TOKEN FILE is missing");
+    env::set_var("API_TOKEN", api_token);
+    println!("Env Set!");
+}
+
 
 
 #[tokio::main]
 async fn main() {
 
+     // Initialization of ENV
+    static START: Once = Once::new();
+    START.call_once(|| {
+       
+            setenv();
+        });
+
     // API Token - We need to replace the current method.    
-    let file_path = "/run/secrets/API_TOKEN_FILE";
-    let api_token = fs::read_to_string(file_path)
-    .expect("API TOKEN FILE is missing");
-
-
+    let api_token = env::var("API_TOKEN").unwrap_or("Test".to_string()).as_str().to_owned();
 
 
     let client = Client::new();
@@ -44,8 +66,10 @@ async fn main() {
     .headers(construct_headers())
     .bearer_auth(api_token)
     .send();
+
     
-    println!("Ping");
+
+
     // Init. Hello wrap.
     let hello = warp::path!("hello" / String)
         .map(|name| format!("Hello, {}!", name));

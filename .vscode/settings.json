@@ -5,6 +5,7 @@
         "Portainer",
         "reqwest",
         "rustfmt",
-        "serde"
+        "serde",
+        "setenv"
     ]
 }
