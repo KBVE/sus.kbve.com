@@ -1,13 +1,51 @@
+// FS - Read Environmental Variables from Docker Secrets
+use std::fs;
+
+// FS Async
+//use tokio::fs;
+
+
 // HashMaps are OP.
-use std::collections::HashMap;
+//  use std::collections::HashMap;
+
+// Headers
+//  use hyper::header::{Headers, Authorization, Bearer};
+use reqwest::Client;
+use reqwest::header::{HeaderMap, HeaderValue, USER_AGENT, CONTENT_TYPE};
+
 // Calling Warp.
 use warp::{Filter, Rejection, Reply};
 // Results would be within the parameters below.
 type Result<T> = std::result::Result<T, Rejection>;
 
+fn construct_headers() -> HeaderMap {
+    let mut headers = HeaderMap::new();
+    headers.insert(USER_AGENT, HeaderValue::from_static("reqwest"));
+    headers.insert(CONTENT_TYPE, HeaderValue::from_static("application/json"));
+    headers
+}
+
+
 
 #[tokio::main]
 async fn main() {
+
+    // API Token - We need to replace the current method.    
+    let file_path = "/run/secrets/API_TOKEN_FILE";
+    let api_token = fs::read_to_string(file_path)
+    .expect("API TOKEN FILE is missing");
+
+
+
+
+    let client = Client::new();
+    let resp = client
+    .post("https://api.kbve.com/api/")
+    .headers(construct_headers())
+    .bearer_auth(api_token)
+    .send();
+    
+    println!("Ping");
     // Init. Hello wrap.
     let hello = warp::path!("hello" / String)
         .map(|name| format!("Hello, {}!", name));

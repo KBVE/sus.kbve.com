@@ -33,7 +33,7 @@ RUN cargo build --target x86_64-unknown-linux-musl --release
 # Runtime
 ################
 
-FROM alpine:3.16.0 AS runtime 
+FROM alpine:latest AS runtime 
 
 # Copy application binary from builder image
 COPY --from=builder /usr/src/sus-kbve/target/x86_64-unknown-linux-musl/release/sus-kbve /usr/local/bin
